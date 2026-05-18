@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahil — Why Abundant</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #060605;
+  --surface: #0e0e0c;
+  --surface2: #151513;
+  --border: #1e1e1b;
+  --border2: #2a2a26;
+  --text: #ece9e0;
+  --muted: #5a5a54;
+  --muted2: #7a7a72;
+  --accent: #b8f050;
+  --accent-dim: rgba(184,240,80,0.08);
+  --accent-border: rgba(184,240,80,0.2);
+  --amber: #f0b840;
+  --amber-dim: rgba(240,184,64,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* GRID LINES */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.content { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  background: rgba(6,6,5,0.85);
+  backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 40px 80px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.1s forwards;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero-name {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(52px, 8vw, 96px);
+  font-weight: 300;
+  line-height: 0.95;
+  color: var(--text);
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.2s forwards;
+}
+
+.hero-name em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-tagline {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 300;
+  color: var(--muted2);
+  margin-bottom: 48px;
+  line-height: 1.4;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.3s forwards;
+}
+
+.hero-pitch {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(16px, 2.2vw, 21px);
+  font-weight: 300;
+  color: #b8b4a8;
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--border2);
+  padding-left: 24px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.4s forwards;
+}
+
+.kw {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.hero-cta-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 48px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.5s forwards;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-ghost {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  background: transparent;
+  border: 1px solid var(--border2);
+  padding: 12px 24px;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+
+/* SECTIONS */
+section {
+  padding: 80px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* WHY ABUNDANT */
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.why-cell {
+  background: var(--surface);
+  padding: 28px;
+  transition: background 0.2s;
+}
+
+.why-cell:hover { background: var(--surface2); }
+
+.why-cell-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.why-cell-text {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #c8c4b8;
+  line-height: 1.65;
+}
+
+.why-cell-text .kw { color: var(--accent); font-style: italic; }
+.why-cell-text .proof { color: var(--amber); }
+
+/* PROOF CARDS */
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 48px;
+}
+
+.proof-card {
+  background: var(--surface);
+  padding: 24px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.proof-card:hover { background: var(--surface2); }
+
+.proof-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--border2);
+}
+
+.proof-card.green::before { background: var(--accent); }
+.proof-card.amber::before { background: var(--amber); }
+
+.proof-num {
+  font-family: 'Fraunces', serif;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.proof-card.green .proof-num { color: var(--accent); }
+.proof-card.amber .proof-num { color: var(--amber); }
+.proof-card .proof-num { color: var(--text); }
+
+.proof-desc {
+  font-size: 11px;
+  color: var(--muted2);
+  line-height: 1.5;
+}
+
+/* EXPERIENCE */
+.exp-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+
+.exp-item {
+  background: var(--surface);
+  padding: 28px 32px;
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 24px;
+  transition: background 0.2s;
+}
+
+.exp-item:hover { background: var(--surface2); }
+
+.exp-meta { }
+
+.exp-company {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.exp-period {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.exp-role {
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.exp-bullets { list-style: none; }
+
+.exp-bullets li {
+  font-size: 12px;
+  color: #9a9890;
+  line-height: 1.6;
+  padding: 3px 0;
+  padding-left: 14px;
+  position: relative;
+}
+
+.exp-bullets li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.exp-bullets li .kw { color: var(--accent); }
+.exp-bullets li .proof { color: var(--amber); }
+
+/* PERSONA MATCH */
+.persona-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.persona-card {
+  background: var(--surface);
+  padding: 28px 24px;
+  transition: background 0.2s;
+}
+
+.persona-card:hover { background: var(--surface2); }
+
+.persona-card.active { background: var(--accent-dim); }
+.persona-card.active .persona-name { color: var(--accent); }
+
+.persona-tag {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.persona-card.active .persona-tag { color: var(--accent); opacity: 0.7; }
+
+.persona-name {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--muted2);
+  margin-bottom: 12px;
+}
+
+.persona-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.persona-card.active .persona-desc { color: #8a9e70; }
+
+.active-badge {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  padding: 3px 8px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-name {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--muted2);
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--accent); }
+
+/* DIVIDER LINE */
+.full-divider {
+  height: 1px;
+  background: var(--border);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 700px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 20px 60px; }
+  section { padding: 60px 20px; }
+  .why-grid { grid-template-columns: 1fr; }
+  .proof-grid { grid-template-columns: 1fr 1fr; }
+  .exp-item { grid-template-columns: 1fr; gap: 12px; }
+  .persona-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 20px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="content">
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">S.DEV × ABUNDANT</div>
+  <ul class="nav-links">
+    <li><a href="#why">Why Abundant</a></li>
+    <li><a href="#proof">Proof</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#fit">Fit</a></li>
+    <li><a href="https://sahildev.vercel.app" target="_blank">Portfolio ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">RPM Intern Application · Abundant AI</div>
+  <div class="hero-name">Sahil<br><em>Khunt</em></div>
+  <div class="hero-tagline">MS Computer Science · USC · AI/ML</div>
+  <div class="hero-pitch">
+    I build <span class="kw">training pipelines, evaluations,</span> and <span class="kw">real-time inference infrastructure</span> — and I'm drawn to Abundant because the <span class="kw">data problem for RL</span> is the one nobody has actually solved yet.
+  </div>
+  <div class="hero-cta-row">
+    <a href="#why" class="btn-primary">Why I want this role</a>
+    <a href="https://sahildev.vercel.app" target="_blank" class="btn-ghost">Portfolio ↗</a>
+  </div>
+</div>
+
+<div class="full-divider"></div>
+
+<!-- WHY ABUNDANT -->
+<section id="why">
+  <div class="section-label">Why Abundant</div>
+  <div class="why-grid">
+    <div class="why-cell">
+      <div class="why-cell-label">The problem I care about</div>
+      <div class="why-cell-text">
+        At CampusX, most of my model failures came down to <span class="kw">training signal quality</span> — not architecture. Abundant is working on that problem at <span class="kw">frontier scale</span>. That's a real bottleneck, not a buzzword.
+      </div>
+    </div>
+    <div class="why-cell">
+      <div class="why-cell-label">Why RL data specifically</div>
+      <div class="why-cell-text">
+        The next capability gains won't come from scraping the web. They'll come from <span class="kw">simulation and learning from experience</span>. That's where Abundant sits — and it's genuinely early.
+      </div>
+    </div>
+    <div class="why-cell">
+      <div class="why-cell-label">Why RPM vs pure engineering</div>
+      <div class="why-cell-text">
+        I've never just built infrastructure — I've also had to define <span class="kw">what "good" looks like</span>, run <span class="kw">experiments</span>, and close the loop. The RPM role is exactly that intersection.
+      </div>
+    </div>
+    <div class="why-cell">
+      <div class="why-cell-label">The environment I do best in</div>
+      <div class="why-cell-text">
+        Open-ended, <span class="kw">high-ownership</span> work where the answer isn't handed to you. I've built production ML without a playbook before — that's when I'm sharpest.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- PROOF -->
+<section id="proof">
+  <div class="section-label">Proof points</div>
+  <div class="proof-grid">
+    <div class="proof-card green">
+      <div class="proof-num">41%</div>
+      <div class="proof-desc">Reduction in policy violations — Trust & Safety classifier, CampusX</div>
+    </div>
+    <div class="proof-card amber">
+      <div class="proof-num">12%</div>
+      <div class="proof-desc">Feed conversion improvement — two-tower rec system with L2R reranking</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-num">99.9%</div>
+      <div class="proof-desc">Uptime on real-time inference infra across 2K+ concurrent transactions</div>
+    </div>
+    <div class="proof-card green">
+      <div class="proof-num">#1</div>
+      <div class="proof-desc">Leaderboard — DSCI 553 rec system competition, ~250 students, RMSE 0.8868</div>
+    </div>
+    <div class="proof-card amber">
+      <div class="proof-num">80K+</div>
+      <div class="proof-desc">Records processed via PySpark pipelines at TCS for large-scale model training</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-num">98%</div>
+      <div class="proof-desc">Classification accuracy on text models at RethinkSoft with strong generalization</div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Relevant experience</div>
+  <div class="exp-list">
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">CampusX</div>
+        <div class="exp-period">Sep 2025 – Jan 2026</div>
+        <div class="exp-role">Co-Founder · ML Engineer</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Built <span class="kw">LLM-based classifier</span> for Trust & Safety — defined <span class="kw">evals</span>, ran <span class="kw">experiments</span>, iterated to <span class="proof">41% reduction</span> in violations</li>
+        <li>Shipped <span class="kw">two-tower retrieval system</span> with representation learning + L2R reranking, <span class="proof">+12% feed conversion</span></li>
+        <li><span class="kw">Real-time inference infrastructure</span> with A/B testing and monitoring — <span class="proof">99.9% uptime</span> at scale</li>
+        <li>Designed <span class="kw">automated model evaluation</span> and retraining workflows with offline ranking metrics</li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">TCS / Givaudan</div>
+        <div class="exp-period">May 2024 – Jun 2025</div>
+        <div class="exp-role">AI Engineer</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Architected <span class="kw">PySpark data pipelines</span> processing <span class="proof">80K+ records</span> for model training and feature engineering</li>
+        <li>Behavioral modeling on <span class="proof">50K+ interaction events</span> — <span class="kw">representation learning embeddings</span> for downstream retrieval</li>
+        <li>Optimized 20+ ML data workflows, reducing <span class="proof">pipeline failures by 15%</span></li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">USC · DSCI 553</div>
+        <div class="exp-period">2025</div>
+        <div class="exp-role">Competition</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Recommendation system in <span class="kw">PySpark + XGBoost</span> — <span class="kw">hillclimbed on training signal distribution</span></li>
+        <li>Reached <span class="proof">#1 leaderboard</span> out of ~250 students with <span class="proof">RMSE 0.8868</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- PERSONA FIT -->
+<section id="fit">
+  <div class="section-label">Persona fit</div>
+  <div class="persona-row">
+    <div class="persona-card">
+      <div class="persona-tag">Persona 01</div>
+      <div class="persona-name">The Craftsman</div>
+      <div class="persona-desc">Cares about quality for its own sake. Extra care in output, data, UX.</div>
+    </div>
+    <div class="persona-card active">
+      <div class="active-badge">That's me</div>
+      <div class="persona-tag">Persona 02</div>
+      <div class="persona-name">The Underdog</div>
+      <div class="persona-desc">Built production ML at an early-stage startup with no playbook, no team, no safety net. Looking for a place to go all out.</div>
+    </div>
+    <div class="persona-card active">
+      <div class="active-badge">Also me</div>
+      <div class="persona-tag">Persona 03</div>
+      <div class="persona-name">The Antifragilist</div>
+      <div class="persona-desc">Defining evals from scratch, shipping under uncertainty, iterating when nothing's working — that's where I do my sharpest thinking.</div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Sahil Khunt</div>
+  <ul class="footer-links">
+    <li><a href="https://sahildev.vercel.app" target="_blank">Portfolio</a></li>
+    <li><a href="mailto:sahil@usc.edu">Email</a></li>
+    <li><a href="https://linkedin.com/in/sahilkhunt" target="_blank">LinkedIn</a></li>
+  </ul>
+</footer>
+
+</div>
+</body>
+</html>
