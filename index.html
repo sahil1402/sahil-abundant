@@ -599,12 +599,6 @@ footer {
         Open-ended, <span class="kw">high-ownership</span> work where the answer isn't handed to you. I've built production ML without a playbook before — that's when I'm sharpest.
       </div>
     </div>
-    <div class="why-cell">
-      <div class="why-cell-label">What I bring on day one</div>
-      <div class="why-cell-text">
-        Production <span class="kw">eval pipelines</span>, hands-on <span class="kw">LLM and agent</span> experience, and the ability to go from <span class="kw">paper to working system</span> fast. I don't need a spec — I need a problem.
-      </div>
-    </div>
   </div>
 </section>
 
@@ -674,24 +668,13 @@ footer {
     </div>
     <div class="exp-item">
       <div class="exp-meta">
-        <div class="exp-company">GraphRAG Agent</div>
+        <div class="exp-company">USC — DSCI 553</div>
         <div class="exp-period">2025</div>
-        <div class="exp-role">Personal Project</div>
+        <div class="exp-role">Rec Systems Competition · ~250 students</div>
       </div>
       <ul class="exp-bullets">
-        <li>Built an <span class="kw">autonomous agent</span> using graph-based retrieval — defined <span class="kw">eval criteria</span> for when the agent was actually performing vs producing confident-sounding output</li>
-        <li>Designed <span class="kw">benchmark tasks</span> from scratch to measure retrieval quality and reasoning depth — no off-the-shelf eval framework</li>
-      </ul>
-    </div>
-    <div class="exp-item">
-      <div class="exp-meta">
-        <div class="exp-company">Clinical AI Agent</div>
-        <div class="exp-period">2025</div>
-        <div class="exp-role">Personal Project</div>
-      </div>
-      <ul class="exp-bullets">
-        <li>Domain-specific agent for clinical decision support — defining <span class="kw">evaluation design</span> was harder than building the model in a <span class="kw">high-stakes domain</span></li>
-        <li>Demonstrates understanding of moving from <span class="kw">general knowledge to domain expertise</span> — exactly the gap Abundant is closing</li>
+        <li>Recommendation system in <span class="kw">PySpark + XGBoost</span> — <span class="kw">hillclimbed on training signal distribution</span></li>
+        <li>Reached <span class="proof">#1 leaderboard</span> out of ~250 students with <span class="proof">RMSE 0.8868</span></li>
       </ul>
     </div>
   </div>
@@ -699,7 +682,62 @@ footer {
 
 <div class="full-divider"></div>
 
-<!-- PERSONA FIT -->
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Projects</div>
+  <div class="exp-list">
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">GraphRAG Agent</div>
+        <div class="exp-period">2025</div>
+        <div class="exp-role">Autonomous Agent · Benchmarking</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Built an <span class="kw">autonomous web agent</span> using graph-based retrieval + MPC planning — benchmarked on Mind2Web, <span class="proof">45% reduction in invalid actions</span> vs ReAct baseline</li>
+        <li>Defined <span class="kw">eval criteria</span> from scratch for when the agent was actually performing vs producing confident-sounding output — no off-the-shelf framework</li>
+        <li>GraphRAG persistent memory outperformed both ReAct and Reflexion on <span class="kw">multi-hop reasoning</span> benchmarks</li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">Clinical AI Agent</div>
+        <div class="exp-period">2025</div>
+        <div class="exp-role">Domain-Specific Agent · Fine-Tuning</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Domain-specific agent for clinical decision support — BioBERT NER + LoRA fine-tuning, moving from <span class="kw">general knowledge to domain expertise</span></li>
+        <li>Designing <span class="kw">evaluation criteria</span> in a <span class="kw">high-stakes domain</span> was harder than building the model — forced first-principles thinking on what "correct" means</li>
+        <li>Weak supervision pipeline generating <span class="proof">50K+ labeled entities</span> for training data — directly relevant to Abundant's data quality problem</li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">LLM Inference Pipeline</div>
+        <div class="exp-period">2025</div>
+        <div class="exp-role">MLOps · Infrastructure</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>FastAPI + Kafka request queuing + Redis <span class="kw">semantic cache</span> — <span class="proof">40% cost reduction</span>, serving <span class="proof">500+ req/min</span> under load</li>
+        <li>Grafana <span class="kw">observability dashboard</span> — p50/p95/p99 latency, token throughput, queue depth per model</li>
+        <li><span class="kw">A/B testing framework</span> to compare model versions on live traffic — same pattern as Abundant's <span class="kw">experimentation platform</span></li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">Multi-Step Research Agent</div>
+        <div class="exp-period">2025</div>
+        <div class="exp-role">LangGraph · Agent Evals</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>LangGraph state machine — plan → execute → critique → revise loop with web search, calculator, and code sandbox tools</li>
+        <li><span class="kw">Benchmarked against GPT-4</span> on multi-hop QA — <span class="proof">87% accuracy</span>, outperforming baseline by <span class="proof">12%</span></li>
+        <li>Streaming UI shows reasoning trace — <span class="kw">eval-first design</span> where every agent step is measurable and comparable</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
 <section id="fit">
   <div class="section-label">Persona fit</div>
   <div class="persona-row">
